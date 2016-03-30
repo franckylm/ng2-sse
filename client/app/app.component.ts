@@ -1,23 +1,31 @@
-import {Component} from 'angular2/core';
+import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from 'angular2/core';
+import {OnInit} from "angular2/core";
 
 @Component({
     selector: 'my-app',
-    template: `
-    <h1>Hello World {{ title }}</h1>
-    <p [textContent]="title"></p>
-    `
+    changeDetection: ChangeDetectionStrategy.Detached,
+    template: `Data from server : {{message}}`
 })
-export class AppComponent {
-    public title = '';
+export class AppComponent implements  OnInit {
+    private EVENT_URL = 'http://localhost:8000/events';
 
-    constructor() {
-        var source = new EventSource('http://localhost:8000/events', { withCredentials: true });
-        source.onmessage = this.updateComponent;
+    constructor(private changeDetector: ChangeDetectorRef) {
+        this.message = '0';
     }
 
-    updateComponent(e) {
-        this.title = e.data;
-        console.log(e.data);
-    }
+    ngOnInit() {
+        // creates event object
+        this.ws = new EventSource(this.EVENT_URL, { withCredentials: true });
 
+        // listing to server messages
+        this.ws.onmessage = (evt) => {
+            this.message = evt.data;
+            console.log(`message from server : ${evt.data}`);
+        };
+
+        // manually detect changes
+        setInterval(() => {
+            this.changeDetector.markForCheck();
+        }, 300);
+    }
 }
