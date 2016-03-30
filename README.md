@@ -21,3 +21,4 @@ $ cd client
 $ npm install
 $ npm start
 ```
+![alt tag](https://raw.githubusercontent.com/franckylm/ng2-sse/master/screenshot.png)
