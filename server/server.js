@@ -20,7 +20,7 @@ server.route({
         var interval = setInterval(function() {
             channel.write("data: " + Math.floor((Math.random() * 100) + 1) + "\n\n");
             console.log("write data...");
-        }, 5000);
+        }, 2000);
 
         request.raw.req.on("close", function() {
             console.error("oops listener closed");
