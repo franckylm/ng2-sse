@@ -3,3 +3,4 @@
 *typings
 client/app/*.js
 client/app/*.js.map
+npm-debug.log

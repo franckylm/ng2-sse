@@ -1,0 +1,7 @@
+{
+  "name": "sse-example",
+  "main": "server.js",
+  "dependencies": {
+    "hapi": "^13.2.2"
+  }
+}
