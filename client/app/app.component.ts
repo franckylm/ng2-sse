@@ -1,16 +1,16 @@
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from 'angular2/core';
-import {OnInit} from "angular2/core";
+import {Component, OnInit, ChangeDetectorRef} from 'angular2/core';
 
 @Component({
     selector: 'my-app',
-    changeDetection: ChangeDetectionStrategy.Detached,
     template: `Data from server : {{message}}`
 })
 export class AppComponent implements  OnInit {
-    private EVENT_URL = 'http://localhost:8000/events';
 
-    constructor(private changeDetector: ChangeDetectorRef) {
-        this.message = '0';
+    private EVENT_URL = 'http://localhost:8000/events';
+    private message: string = '0';
+
+    constructor (private changeDetector: ChangeDetectorRef) {
+
     }
 
     ngOnInit() {
@@ -19,13 +19,17 @@ export class AppComponent implements  OnInit {
 
         // listing to server messages
         this.ws.onmessage = (evt) => {
-            this.message = evt.data;
-            console.log(`message from server : ${evt.data}`);
-        };
+            this.logServerMessage(evt.data);
 
-        // manually detect changes
-        setInterval(() => {
-            this.changeDetector.markForCheck();
-        }, 300);
+            // update the model
+            this.message = evt.data;
+
+            // manually detect changes
+            this.changeDetector.detectChanges();
+        };
+    }
+
+    logServerMessage (data) {
+        console.log(`message from server : ${data}`);
     }
 }
